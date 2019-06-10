@@ -1,0 +1,97 @@
+#choice-hands{ 
+  display: flex
+}
+
+#my-choice {
+  flex-grow: 1; 
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+
+#your-choice {
+  display: -webkit-flex;
+  flex-direction: row-reverse
+}
+
+
+#whose-hands {
+  display: flex
+}
+
+#my {
+ flex-grow: 1;
+ display: flex;
+ flex-wrap: nowrap;
+}
+
+#you {
+  display: -webkit-flex;
+  flex-direction: row-reverse;
+}
+
+img {
+  border-radius: 50px 50px 50px 50px
+}
+
+#whose-hands {
+  zoom:1.5;
+}
+
+#result {
+  text-align: center;
+}
+
+body {
+  margin:  2em auto;
+  padding: 1em;
+  width: 90%;
+  color:#555555;
+  background-color: #fff;
+  box-shadow: 0 0 5px 5px hsl(188, 49%, 82%), 0 0 5px 3px #bce2e8 inset;
+  border-radius: 10px;
+}
+h1 {
+  text-align: center;
+}
+#my-life {
+  flex-grow: 1;
+  display: flex;
+}
+
+#life {
+  display: flex;
+}
+
+#final-result {
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+}
+
+h1 {
+  background-color: black;
+}
+
+#start-title {
+  text-align: center;
+}
+
+
+
+#h2 {
+
+  display :none; 
+}
+
+#game-screen {
+
+  display :none; 
+}
+
+
+
+
+

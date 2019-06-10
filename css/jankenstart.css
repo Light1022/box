@@ -1,0 +1,21 @@
+
+
+h1 {
+  text-align: center;
+}
+
+body {
+  background-color: black
+}
+
+div {
+  text-align: center;
+}
+
+#start-title {
+  display :none; 
+}
+
+h1 {
+  display :none; 
+}
