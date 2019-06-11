@@ -37,13 +37,13 @@ window.app =
 
   mySetBind:->
     $('#gu').bind 'click', =>
-      @putAllHands("gu", 0)
+      @putAllHands("ryu_gu", 0)
      
     $('#choki').bind 'click', =>
-      @putAllHands("choki", 1)
+      @putAllHands("ryu_choki", 1)
      
     $('#pa').bind 'click',=>
-      @putAllHands("pa", 2)
+      @putAllHands("ryu_pa", 2)
       
   putAllHands:(hand, @my_hand) ->
     @choiceYouHand()
@@ -53,14 +53,14 @@ window.app =
     @announceFinal()
 
   changeMyHand:(hand)->
-    $('#my').html """<img src="./image/#{hand}.png">"""
+    $('#my').html """<img src="./image/#{hand}.gif">"""
 
   choiceYouHand: ->
     @your_hand = _.random 0, 2 #0, 1, 2
      
-    your_hand_string = ["gu", "choki", "pa"]
+    your_hand_string = ["ken_gu", "ken_choki", "ken_pa"]
 
-    $('#you').html """<img src="./image/#{your_hand_string[@your_hand]}.png">"""
+    $('#you').html """<img src="./image/#{your_hand_string[@your_hand]}.gif">"""
 
   showResult: () ->
     diff_hands = @your_hand - @my_hand
@@ -123,8 +123,8 @@ window.app =
     $('#reset-button').bind 'click',=>
       
       # my, youの画像
-      $('#my').html "my"
-      $('#you').html "you"
+      $('#my').html """<img src="./image/ryu_stand.gif">"""
+      $('#you').html """<img src="./image/ken_stand.gif">"""
 
       # ハートを戻す
       @my_life = 5
@@ -148,8 +148,8 @@ window.app =
     $('#title-button').bind 'click',=>
       $('#game-screen').css 'display', 'none'
       $('#start-title').css 'display', 'block'
-      $('#my').html "my"
-      $('#you').html "you"
+      $('#my').html """<img src="./image/ryu_stand.gif">"""
+      $('#you').html """<img src="./image/ken_stand.gif">"""
 
       @my_life = 5
       @changemyHeart()

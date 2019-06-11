@@ -16,23 +16,23 @@
 
 
 #whose-hands {
-  display: flex
+  display: flex;
 }
 
 #my {
  flex-grow: 1;
- display: flex;
  flex-wrap: nowrap;
+ align-self: flex-end
 }
 
 #you {
-  display: -webkit-flex;
+  transform: scale(-1,1);
   flex-direction: row-reverse;
+  align-self: flex-end;
+
 }
 
-img {
-  border-radius: 50px 50px 50px 50px
-}
+
 
 #whose-hands {
   zoom:1.5;

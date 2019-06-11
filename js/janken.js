@@ -33,17 +33,17 @@
     mySetBind: function() {
       $('#gu').bind('click', (function(_this) {
         return function() {
-          return _this.putAllHands("gu", 0);
+          return _this.putAllHands("ryu_gu", 0);
         };
       })(this));
       $('#choki').bind('click', (function(_this) {
         return function() {
-          return _this.putAllHands("choki", 1);
+          return _this.putAllHands("ryu_choki", 1);
         };
       })(this));
       return $('#pa').bind('click', (function(_this) {
         return function() {
-          return _this.putAllHands("pa", 2);
+          return _this.putAllHands("ryu_pa", 2);
         };
       })(this));
     },
@@ -56,13 +56,13 @@
       return this.announceFinal();
     },
     changeMyHand: function(hand) {
-      return $('#my').html("<img src=\"./image/" + hand + ".png\">");
+      return $('#my').html("<img src=\"./image/" + hand + ".gif\">");
     },
     choiceYouHand: function() {
       var your_hand_string;
       this.your_hand = _.random(0, 2);
-      your_hand_string = ["gu", "choki", "pa"];
-      return $('#you').html("<img src=\"./image/" + your_hand_string[this.your_hand] + ".png\">");
+      your_hand_string = ["ken_gu", "ken_choki", "ken_pa"];
+      return $('#you').html("<img src=\"./image/" + your_hand_string[this.your_hand] + ".gif\">");
     },
     showResult: function() {
       var diff_hands;
@@ -119,8 +119,8 @@
     resetGame: function() {
       return $('#reset-button').bind('click', (function(_this) {
         return function() {
-          $('#my').html("my");
-          $('#you').html("you");
+          $('#my').html("<img src=\"./image/ryu_stand.gif\">");
+          $('#you').html("<img src=\"./image/ken_stand.gif\">");
           _this.my_life = 5;
           _this.changemyHeart();
           _this.your_life = 5;
@@ -140,8 +140,8 @@
         return function() {
           $('#game-screen').css('display', 'none');
           $('#start-title').css('display', 'block');
-          $('#my').html("my");
-          $('#you').html("you");
+          $('#my').html("<img src=\"./image/ryu_stand.gif\">");
+          $('#you').html("<img src=\"./image/ken_stand.gif\">");
           _this.my_life = 5;
           _this.changemyHeart();
           _this.your_life = 5;
