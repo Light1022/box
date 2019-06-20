@@ -1,45 +1,70 @@
-#choice-hands{ 
+#choice-hands { 
   display: flex
 }
 
 #my-choice {
+  align-items: center;
   flex-grow: 1; 
-  display: flex;
+  display: inline-flex;
   flex-wrap: nowrap;
+  width: 140px;
+  height: 145px;
+  border: none;
+  overflow: hidden;
+  zoom: 0.5;
 }
 
 
 #your-choice {
-  display: -webkit-flex;
-  flex-direction: row-reverse
+  align-items: center;
+  display: flex;
+  flex-direction: row-reverse;
+  height: 145px;
+  border: none;
+  overflow: hidden;
+  zoom: 0.5;
+}
+
+
+#count-round {
+  text-align: center;
+  height: 60px;
+
 }
 
 
 #whose-hands {
   display: flex;
+  height: 300px;
 }
 
 #my {
  flex-grow: 1;
  flex-wrap: nowrap;
- align-self: flex-end
+ align-self: flex-end;
+ zoom: 1.6;
 }
 
 #you {
   transform: scale(-1,1);
   flex-direction: row-reverse;
   align-self: flex-end;
-
+  zoom: 1.6;
 }
 
 
 
-#whose-hands {
-  zoom:1.5;
-}
 
 #result {
   text-align: center;
+}
+
+#game-screen{
+  background-image: url("../image/stages/ryu_stage2.jpg");
+  background-repeat: no-repeat;
+  background-size: auto 100%; 
+  background-position:  0% 60%;
+
 }
 
 body {
@@ -47,16 +72,55 @@ body {
   padding: 1em;
   width: 90%;
   color:#555555;
-  background-color: #fff;
-  box-shadow: 0 0 5px 5px hsl(188, 49%, 82%), 0 0 5px 3px #bce2e8 inset;
+  box-shadow: 0 0 5px 5px hsl(188,49%, 82%), 0 0 5px 3px #bce2e8 inset;
   border-radius: 10px;
 }
 h1 {
   text-align: center;
 }
 #my-life {
+  transform: scale(-1,1);
   flex-grow: 1;
-  display: flex;
+  display: inline-block;
+  -webkit-appearance: none;
+  height: 38px;
+  vertical-align: -0.2em;
+}
+
+#my-life::-webkit-progress-bar {
+    background: tomato;
+    border-radius: 10% 0% 0% 10%;
+  border-radius: 10px;
+  box-shadow: 0 0 5px 5px white, 0 0 5px 3px whitesmoke inset;
+}
+
+#my-life::-webkit-progress-value {
+  background-color: yellow;
+  border-radius: 10% 0% 0% 10%;
+  border-radius: 10px;
+}
+
+#your-life {
+  width: 47.032%;
+  float: right;
+  display: inline-block;
+  -webkit-appearance: none;
+  height: 38px;
+  vertical-align: -0.2em;
+
+}
+
+#your-life::-webkit-progress-bar {
+    background: tomato;
+    border-radius: 10% 0% 0% 10%;
+  border-radius: 10px;
+  box-shadow: 0 0 5px 5px white, 0 0 5px 3px whitesmoke inset;
+}
+
+#your-life::-webkit-progress-value {
+  background-color: yellow;
+  border-radius: 10% 0% 0% 10%;
+  border-radius: 10px;
 }
 
 #life {
@@ -65,6 +129,7 @@ h1 {
 
 #final-result {
   text-align: center;
+  height: 30px;
 }
 
 h2 {
@@ -91,7 +156,43 @@ h1 {
   display :none; 
 }
 
+#next-button {
+
+  display: none;
+}
 
 
+#win-mark {
+  height: 60px;
+  display: flex;
+}
 
+#my-mark {
+  flex-grow: 1;
+  flex-wrap: nowrap;
+  
+}
+
+
+#your-mark {
+  display: flex; 
+  flex-direction: row-reverse;
+
+}
+
+#block { 
+  width: 40%;
+  margin: 30% 0 0 31%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.0;
+  text-align: center;
+}
+
+#block img{
+  width: 100%;
+  
+  
+}
 

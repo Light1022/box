@@ -25,8 +25,12 @@
      </div>
     </div>
 
+
     <div id ="game-screen">
       <h2>じゃん拳</h2>
+      <div id="count-round"><img src="./image/rounds/round_1.png"></div>
+<br>
+<br> 
       <div id ="choice-hands">
         <div id ="my-choice">
           <div id="gu" class="other clickable_hand" data-num="0", data-str="gu"><img src="./image/ryu_hado_gazou.jpg"></div>
@@ -40,27 +44,41 @@
           <div id="pa" class="hand"><img src="./image/ken_tatsumaki_gazou2P.jpg"></div>
         </div>
       </div>
+   <br> 
+      <div id="result">Get Ready...?</div>
+   <br>
+        <div id="life">
+          <progress id="my-life" min="0" max="100" value="100" ></progress>
+          <div id="ko"><img src="./image/ko.jpg"></div>
+          <progress id="your-life" min="0" max="100" value="100" ></progress>
+        </div>
+      
+            <div id="win-mark">
+              <div id="my-mark"></div>
+              <div id="your-mark"></div>
+            </div>
 
-      <div id="whose-hands">
+  
+        <div id="whose-hands">
         <div id="my"><img src="./image/ryu_stand.gif"></div>
         <div id="you"><img src="./image/ken_stand.gif"></div>
-
+<br>
+<br>
+<br>
       </div>   
-      
-      <div id="result">Get Ready...?</div>
-        <div id="life">
-          <div id="my-life"></div>
-          <div id="your-life"></div>
-        </div>
-    <br>
       <div id="final-result">最終結果</div>
+      <div id="block"></div>
+
     <br>
     <br>
       <button id="reset-button">リセットボタン</button>
     <br>
-    <br>
       <button id="title-button">タイトルに戻る</button>
 
+    
+
+
+    
   </div>
    
    
