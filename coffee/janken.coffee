@@ -9,7 +9,7 @@ window.app =
   my_victory: 0
   your_victory: 0
   round_count: 0
-  wait_time: 3000
+  wait_time: 5000
   your_hand_string: ""
   all_result: ""
   final_result: ""
@@ -52,30 +52,37 @@ window.app =
      
     $('#pa').bind 'click',=>
       @putAllHands("ryu_pa", 2)
+
   
   
   putAllHands:(hand, @my_hand) ->
+    console.log "hands"
+    @countupRound()
     @choiceYouHand()
     @changeMyHand(hand)
     @showResult()
     @checkLife()
-    @countupRound()
     @announceFinal()
     @checkMark()
     @nextGame()
     @endGame()
-    
-
-
+  
   changeMyHand:(hand)->
-    $('#my').html """<img src="./image/ryuskills/#{hand}.gif">"""
+    if @round_count % 4 != 0
+      $('#my').html """<img src="./image/ryuskills/#{hand}.gif">"""
+    
+    if @round_count % 4 == 0
+      $('#my').html """<img src="./image/ryuskills/#{hand}_ex.gif">"""
+    console.log "exwaza"
 
   choiceYouHand: ->
     @your_hand = _.random 0, 2 #0, 1, 2
      
     your_hand_string = ["ken_gu", "ken_choki", "ken_pa"]
-
-    $('#you').html """<img src="./image/kenskills/#{your_hand_string[@your_hand]}.gif">"""
+    if @round_count % 4 != 0
+      $('#you').html """<img src="./image/kenskills/#{your_hand_string[@your_hand]}.gif">"""
+    if @round_count % 4 == 0
+      $('#you').html """<img src="./image/kenskills/#{your_hand_string[@your_hand]}_ex.gif">"""
 
   showResult: () ->
     diff_hands = @your_hand - @my_hand
@@ -91,12 +98,22 @@ window.app =
 
 
   checkLife: () ->
+    console.log("round_count in check life#{@round_count}")
     if @all_result == "Hit!!"
-      @your_life = @your_life-20
+      if @round_count % 4 != 0
+        @your_life = @your_life-20
+      else
+        @your_life = @your_life-60
+        console.log "gon"
       $('#your-life').attr(value:@your_life) 
+    
     else if @all_result == "Damage!!"
-      @my_life = @my_life-20
+      if @round_count % 4 !=0
+        @my_life = @my_life-20
+      else
+        @my_life = @my_life-60
       $('#my-life').attr(value:@my_life) 
+    #debugger
 
     @changemyHeart()
     @changeyourHeart()
@@ -162,15 +179,14 @@ window.app =
 
 
   announceFinal: () ->
-    console.log "def"
     console.log "yuorlife: #{@your_life}, mylife: #{@my_life}"
 
-    if @your_life == 0
+    if @your_life <= 0 
       @lockButton("You Win!!")
       $('#my').html """<img src="./image/ryu_victory.gif">"""
       $('#you').html """<img src="./image/ken_lose.gif">"""
 
-    else if @my_life == 0
+    else if @my_life <= 0
       @lockButton("You Lose…") 
       $('#my').html """<img src="./image/ryu_lose.gif">"""
       $('#you').html """<img src="./image/ken_victory.gif">"""
@@ -199,6 +215,7 @@ window.app =
   countupRound:->
     @round_count = @round_count+1 
     $('#count-round').html """<img src="./image/rounds/round_#{@round_count}.png">"""
+    console.log "count"
 
   
 
@@ -208,6 +225,8 @@ window.app =
  
   resetGame: () ->
     $('#reset-button').bind 'click',=>
+      $('#count-round').html """<img src="./image/rounds/round_1.png">"""
+      @round_count = 0
       
       # my, youの画像
       $('#my').html """<img src="./image/ryu_stand.gif">"""
@@ -219,12 +238,17 @@ window.app =
       # ハートを戻す
       $('#my-life').attr(value:100) 
       $('#your-life').attr(value:100)
-
+  
+    
       @my_victory = 0
       @addmyMark()
 
       @your_victory =0
       @addyourMark()
+      
+      @my_life = 100
+
+      @your_life = 100
 
       # 判定
       $('#result').html "Get Ready...?"
@@ -237,12 +261,14 @@ window.app =
         @mySetBind()
         @final_result = ""
       
-      @round_count = 0
-      @countupRound()
+      
 
 
   returnTitle: () ->
     $('#title-button').bind 'click',=>
+      $('#count-round').html """<img src="./image/rounds/round_1.png">"""
+      @round_count = 0
+      
       $('#game-screen').css 'display', 'none'
       $('#start-title').css 'display', 'block'
       $('#my').html """<img src="./image/ryu_stand.gif">"""
@@ -253,12 +279,19 @@ window.app =
 
       $('#my-life').attr(value:100) 
       $('#your-life').attr(value:100)
-
+    
+      
+    
       @my_victory = 0
       @addmyMark()
 
       @your_victory =0
       @addyourMark()
+      
+      @my_life = 100
+
+      @your_life = 100
+  
 
       $('#result').html "Get Ready...?"
       $('#final-result').html "最終結果"
@@ -269,12 +302,11 @@ window.app =
         @final_result = ""
 
         
-      @round_count = 0
-      @countupRound()
-  
+      
+      
 
   nextGame: () ->
-    console.log "ume"
+    console.log "nextgame"
     if (@final_result == "You Win!!") or (@final_result == "You Lose…") or (@final_result == "Draw Game")
       setTimeout (->
         $('#my').html """<img src="./image/ryu_stand.gif">"""
@@ -283,18 +315,22 @@ window.app =
         $('#final-result').html "最終結果"
         
        ), @wait_time
+       
+      $('#count-round').html """<img src="./image/rounds/round_1.png">"""
+      @round_count = 0
+      
+      
       $('#my-life').attr(value:100) 
       $('#your-life').attr(value:100)
       
       @mySetBind() 
       @final_result = ""
        
+      @my_life = 100
+
+      @your_life = 100
        
-      @your_life = (value:100) 
-      @changeyourHeart()
-       
-      @round_count = 0
-      @countupRound()
+    
       
   endGame: () ->
     console.log "endgame" 

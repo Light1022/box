@@ -12,7 +12,7 @@
     my_victory: 0,
     your_victory: 0,
     round_count: 0,
-    wait_time: 3000,
+    wait_time: 5000,
     your_hand_string: "",
     all_result: "",
     final_result: "",
@@ -56,24 +56,36 @@
     },
     putAllHands: function(hand, my_hand) {
       this.my_hand = my_hand;
+      console.log("hands");
+      this.countupRound();
       this.choiceYouHand();
       this.changeMyHand(hand);
       this.showResult();
       this.checkLife();
-      this.countupRound();
       this.announceFinal();
       this.checkMark();
       this.nextGame();
       return this.endGame();
     },
     changeMyHand: function(hand) {
-      return $('#my').html("<img src=\"./image/ryuskills/" + hand + ".gif\">");
+      if (this.round_count % 4 !== 0) {
+        $('#my').html("<img src=\"./image/ryuskills/" + hand + ".gif\">");
+      }
+      if (this.round_count % 4 === 0) {
+        $('#my').html("<img src=\"./image/ryuskills/" + hand + "_ex.gif\">");
+      }
+      return console.log("exwaza");
     },
     choiceYouHand: function() {
       var your_hand_string;
       this.your_hand = _.random(0, 2);
       your_hand_string = ["ken_gu", "ken_choki", "ken_pa"];
-      return $('#you').html("<img src=\"./image/kenskills/" + your_hand_string[this.your_hand] + ".gif\">");
+      if (this.round_count % 4 !== 0) {
+        $('#you').html("<img src=\"./image/kenskills/" + your_hand_string[this.your_hand] + ".gif\">");
+      }
+      if (this.round_count % 4 === 0) {
+        return $('#you').html("<img src=\"./image/kenskills/" + your_hand_string[this.your_hand] + "_ex.gif\">");
+      }
     },
     showResult: function() {
       var diff_hands;
@@ -88,13 +100,23 @@
       return $('#result').html("<h>" + this.all_result + "</h>");
     },
     checkLife: function() {
+      console.log("round_count in check life" + this.round_count);
       if (this.all_result === "Hit!!") {
-        this.your_life = this.your_life - 20;
+        if (this.round_count % 4 !== 0) {
+          this.your_life = this.your_life - 20;
+        } else {
+          this.your_life = this.your_life - 60;
+          console.log("gon");
+        }
         $('#your-life').attr({
           value: this.your_life
         });
       } else if (this.all_result === "Damage!!") {
-        this.my_life = this.my_life - 20;
+        if (this.round_count % 4 !== 0) {
+          this.my_life = this.my_life - 20;
+        } else {
+          this.my_life = this.my_life - 60;
+        }
         $('#my-life').attr({
           value: this.my_life
         });
@@ -160,13 +182,12 @@
       })(this));
     },
     announceFinal: function() {
-      console.log("def");
       console.log("yuorlife: " + this.your_life + ", mylife: " + this.my_life);
-      if (this.your_life === 0) {
+      if (this.your_life <= 0) {
         this.lockButton("You Win!!");
         $('#my').html("<img src=\"./image/ryu_victory.gif\">");
         $('#you').html("<img src=\"./image/ken_lose.gif\">");
-      } else if (this.my_life === 0) {
+      } else if (this.my_life <= 0) {
         this.lockButton("You Lose…");
         $('#my').html("<img src=\"./image/ryu_lose.gif\">");
         $('#you').html("<img src=\"./image/ken_victory.gif\">");
@@ -190,7 +211,8 @@
     },
     countupRound: function() {
       this.round_count = this.round_count + 1;
-      return $('#count-round').html("<img src=\"./image/rounds/round_" + this.round_count + ".png\">");
+      $('#count-round').html("<img src=\"./image/rounds/round_" + this.round_count + ".png\">");
+      return console.log("count");
     },
     lockButton: function(final_result) {
       this.final_result = final_result;
@@ -199,6 +221,8 @@
     resetGame: function() {
       return $('#reset-button').bind('click', (function(_this) {
         return function() {
+          $('#count-round').html("<img src=\"./image/rounds/round_1.png\">");
+          _this.round_count = 0;
           $('#my').html("<img src=\"./image/ryu_stand.gif\">");
           $('#you').html("<img src=\"./image/ken_stand.gif\">");
           $('#block').animate({
@@ -214,21 +238,23 @@
           _this.addmyMark();
           _this.your_victory = 0;
           _this.addyourMark();
+          _this.my_life = 100;
+          _this.your_life = 100;
           $('#result').html("Get Ready...?");
           $('#final-result').html("最終結果");
           if ((_this.final_result === "You Win!!") || (_this.final_result === "You Lose…") || (_this.final_result === "Draw Game")) {
             console.log("invalid");
             _this.mySetBind();
-            _this.final_result = "";
+            return _this.final_result = "";
           }
-          _this.round_count = 0;
-          return _this.countupRound();
         };
       })(this));
     },
     returnTitle: function() {
       return $('#title-button').bind('click', (function(_this) {
         return function() {
+          $('#count-round').html("<img src=\"./image/rounds/round_1.png\">");
+          _this.round_count = 0;
           $('#game-screen').css('display', 'none');
           $('#start-title').css('display', 'block');
           $('#my').html("<img src=\"./image/ryu_stand.gif\">");
@@ -246,20 +272,20 @@
           _this.addmyMark();
           _this.your_victory = 0;
           _this.addyourMark();
+          _this.my_life = 100;
+          _this.your_life = 100;
           $('#result').html("Get Ready...?");
           $('#final-result').html("最終結果");
           if ((_this.final_result === "You Win!!") || (_this.final_result === "You Lose…") || (_this.final_result === "Draw Game")) {
             console.log("invalid");
             _this.mySetBind();
-            _this.final_result = "";
+            return _this.final_result = "";
           }
-          _this.round_count = 0;
-          return _this.countupRound();
         };
       })(this));
     },
     nextGame: function() {
-      console.log("ume");
+      console.log("nextgame");
       if ((this.final_result === "You Win!!") || (this.final_result === "You Lose…") || (this.final_result === "Draw Game")) {
         setTimeout((function() {
           $('#my').html("<img src=\"./image/ryu_stand.gif\">");
@@ -267,6 +293,8 @@
           $('#result').html("Get Ready...?");
           return $('#final-result').html("最終結果");
         }), this.wait_time);
+        $('#count-round').html("<img src=\"./image/rounds/round_1.png\">");
+        this.round_count = 0;
         $('#my-life').attr({
           value: 100
         });
@@ -275,12 +303,8 @@
         });
         this.mySetBind();
         this.final_result = "";
-        this.your_life = {
-          value: 100
-        };
-        this.changeyourHeart();
-        this.round_count = 0;
-        return this.countupRound();
+        this.my_life = 100;
+        return this.your_life = 100;
       }
     },
     endGame: function() {
