@@ -5,6 +5,8 @@
   });
 
   window.app = {
+    chara: "",
+    chara_number: "",
     my_hand: 0,
     your_hand: 0,
     my_life: 100,
@@ -17,6 +19,7 @@
     all_result: "",
     final_result: "",
     initialize: function() {
+      this.setChara();
       this.beginTitle();
       this.mySetBind();
       this.checkLife();
@@ -27,30 +30,56 @@
       return this.endGame();
     },
     beginTitle: function() {
-      $('#start-button').click(function() {
-        $('#start-title').css('display', 'none');
-        return $('#game-screen').css('display', 'block');
-      });
+      console.log("beginTitle");
+      console.log(this.my_player);
+      console.log(this.your_player);
+      $('#start-button').click((function(_this) {
+        return function() {
+          console.log(_this.my_player);
+          console.log(_this.your_player);
+          $('#start-title').css('display', 'none');
+          $('#game-screen').css('display', 'block');
+          $('#my').html("<img src=\"./image/" + _this.my_player + "_stand.gif\">");
+          $('#you').html("<img src=\"./image/" + _this.your_player + "_stand.gif\">");
+          $('#gu').html("<img src=\"./image/select/" + _this.my_player + "_hado_gazou.jpg\">");
+          $('#choki').html("<img src=\"./image/select/" + _this.my_player + "_shoryu_gazou.jpg\">");
+          $('#pa').html("<img src=\"./image/select/" + _this.my_player + "_tatsumaki_gazou.jpg\">");
+          $('#2pgu').html("<img src=\"./image/select/" + _this.your_player + "_hado_gazou.jpg\">");
+          $('#2pchoki').html("<img src=\"./image/select/" + _this.your_player + "_shoryu_gazou.jpg\">");
+          $('#2ppa').html("<img src=\"./image/select/" + _this.your_player + "_tatsumaki_gazou.jpg\">");
+          return $('#block').animate({
+            opacity: 0.0
+          });
+        };
+      })(this));
       return $('service-button').click(function() {
         $('h1').css('display', 'none');
         $("#start-button").css('display', 'none');
         return $("#service-button").css('display', 'none');
       });
     },
+    setChara: function() {
+      var ALL_CHARACTERS, my_charanumber, your_charanumber;
+      ALL_CHARACTERS = ["ryu", "ken", "goki"];
+      my_charanumber = 2;
+      this.my_player = ALL_CHARACTERS[my_charanumber];
+      your_charanumber = 0;
+      return this.your_player = ALL_CHARACTERS[your_charanumber];
+    },
     mySetBind: function() {
       $('#gu').bind('click', (function(_this) {
         return function() {
-          return _this.putAllHands("ryu_gu", 0);
+          return _this.putAllHands(_this.my_player + "_gu", 0);
         };
       })(this));
       $('#choki').bind('click', (function(_this) {
         return function() {
-          return _this.putAllHands("ryu_choki", 1);
+          return _this.putAllHands(_this.my_player + "_choki", 1);
         };
       })(this));
       return $('#pa').bind('click', (function(_this) {
         return function() {
-          return _this.putAllHands("ryu_pa", 2);
+          return _this.putAllHands(_this.my_player + "_pa", 2);
         };
       })(this));
     },
@@ -69,22 +98,23 @@
     },
     changeMyHand: function(hand) {
       if (this.round_count % 4 !== 0) {
-        $('#my').html("<img src=\"./image/ryuskills/" + hand + ".gif\">");
+        $('#my').html("<img src=\"./image/" + this.my_player + "skills/" + hand + ".gif\">");
+        console.log("waza");
       }
       if (this.round_count % 4 === 0) {
-        $('#my').html("<img src=\"./image/ryuskills/" + hand + "_ex.gif\">");
+        $('#my').html("<img src=\"./image/" + this.my_player + "skills/" + hand + "_ex.gif\">");
       }
       return console.log("exwaza");
     },
     choiceYouHand: function() {
       var your_hand_string;
       this.your_hand = _.random(0, 2);
-      your_hand_string = ["ken_gu", "ken_choki", "ken_pa"];
+      your_hand_string = [this.your_player + "_gu", this.your_player + "_choki", this.your_player + "_pa"];
       if (this.round_count % 4 !== 0) {
-        $('#you').html("<img src=\"./image/kenskills/" + your_hand_string[this.your_hand] + ".gif\">");
+        $('#you').html("<img src=\"./image/" + this.your_player + "skills/" + your_hand_string[this.your_hand] + ".gif\">");
       }
       if (this.round_count % 4 === 0) {
-        return $('#you').html("<img src=\"./image/kenskills/" + your_hand_string[this.your_hand] + "_ex.gif\">");
+        return $('#you').html("<img src=\"./image/" + this.your_player + "skills/" + your_hand_string[this.your_hand] + "_ex.gif\">");
       }
     },
     showResult: function() {
@@ -174,8 +204,8 @@
       return $('#my-choice').click((function(_this) {
         return function() {
           return setTimeout((function() {
-            $('#my').html("<img src=\"./image/ryu_stand.gif\">");
-            $('#you').html("<img src=\"./image/ken_stand.gif\">");
+            $('#my').html("<img src=\"./image/" + _this.my_player + "_stand.gif\">");
+            $('#you').html("<img src=\"./image/" + _this.your_player + "_stand.gif\">");
             return $('#result').html("Get Ready...?");
           }), _this.wait_time);
         };
@@ -185,26 +215,26 @@
       console.log("yuorlife: " + this.your_life + ", mylife: " + this.my_life);
       if (this.your_life <= 0) {
         this.lockButton("You Win!!");
-        $('#my').html("<img src=\"./image/ryu_victory.gif\">");
-        $('#you').html("<img src=\"./image/ken_lose.gif\">");
+        $('#my').html("<img src=\"./image/" + this.my_player + "_victory.gif\">");
+        $('#you').html("<img src=\"./image/" + this.your_player + "_lose.gif\">");
       } else if (this.my_life <= 0) {
         this.lockButton("You Lose…");
-        $('#my').html("<img src=\"./image/ryu_lose.gif\">");
-        $('#you').html("<img src=\"./image/ken_victory.gif\">");
+        $('#my').html("<img src=\"./image/" + this.my_player + "_lose.gif\">");
+        $('#you').html("<img src=\"./image/" + this.your_player + "_victory.gif\">");
       }
       if (this.round_count === 12) {
         if (this.my_life > this.your_life) {
           this.lockButton("You Win!!");
-          $('#my').html("<img src=\"./image/ryu_victory.gif\">");
-          $('#you').html("<img src=\"./image/ken_lose.gif\">");
+          $('#my').html("<img src=\"./image/" + this.my_player + "_victory.gif\">");
+          $('#you').html("<img src=\"./image/" + this.your_player + "_lose.gif\">");
         } else if (this.your_life > this.my_life) {
           this.lockButton("You Lose…");
-          $('#my').html("<img src=\"./image/ryu_lose.gif\">");
-          $('#you').html("<img src=\"./image/ken_victory.gif\">");
+          $('#my').html("<img src=\"./image/" + this.my_player + "_lose.gif\">");
+          $('#you').html("<img src=\"./image/" + this.your_player + "_victory.gif\">");
         } else if (this.your_life === this.my_life) {
           this.lockButton("Draw Game");
-          $('#my').html("<img src=\"./image/ryu_stand.gif\">");
-          $('#you').html("<img src=\"./image/ken_stand.gif\">");
+          $('#my').html("<img src=\"./image/" + this.my_player + "_stand.gif\">");
+          $('#you').html("<img src=\"./image/" + this.your_player + "_stand.gif\">");
         }
       }
       return $('#final-result').html("<h>" + this.final_result + "</h>");
@@ -223,8 +253,8 @@
         return function() {
           $('#count-round').html("<img src=\"./image/rounds/round_1.png\">");
           _this.round_count = 0;
-          $('#my').html("<img src=\"./image/ryu_stand.gif\">");
-          $('#you').html("<img src=\"./image/ken_stand.gif\">");
+          $('#my').html("<img src=\"./image/" + _this.my_player + "_stand.gif\">");
+          $('#you').html("<img src=\"./image/" + _this.your_player + "_stand.gif\">");
           $('#block').animate({
             opacity: 0.0
           });
@@ -257,8 +287,8 @@
           _this.round_count = 0;
           $('#game-screen').css('display', 'none');
           $('#start-title').css('display', 'block');
-          $('#my').html("<img src=\"./image/ryu_stand.gif\">");
-          $('#you').html("<img src=\"./image/ken_stand.gif\">");
+          $('#my').html("<img src=\"./image/" + _this.my_player + "_stand.gif\">");
+          $('#you').html("<img src=\"./image/" + _this.your_player + "_stand.gif\">");
           $('#block').animate({
             opacity: 0.0
           });
@@ -287,12 +317,14 @@
     nextGame: function() {
       console.log("nextgame");
       if ((this.final_result === "You Win!!") || (this.final_result === "You Lose…") || (this.final_result === "Draw Game")) {
-        setTimeout((function() {
-          $('#my').html("<img src=\"./image/ryu_stand.gif\">");
-          $('#you').html("<img src=\"./image/ken_stand.gif\">");
-          $('#result').html("Get Ready...?");
-          return $('#final-result').html("最終結果");
-        }), this.wait_time);
+        setTimeout(((function(_this) {
+          return function() {
+            $('#my').html("<img src=\"./image/" + _this.my_player + "_stand.gif\">");
+            $('#you').html("<img src=\"./image/" + _this.your_player + "_stand.gif\">");
+            $('#result').html("Get Ready...?");
+            return $('#final-result').html("最終結果");
+          };
+        })(this)), this.wait_time);
         $('#count-round').html("<img src=\"./image/rounds/round_1.png\">");
         this.round_count = 0;
         $('#my-life').attr({
@@ -311,16 +343,16 @@
       console.log("endgame");
       if (this.my_victory === 2) {
         console.log("cuo");
-        $('#block').html("<img src=\"./image/1pwins/ryu_win_ken_lose.png\">");
+        $('#block').html("<img src=\"./image/1pwins/" + this.my_player + "_win_" + this.your_player + "_lose.png\">");
         $('#block').animate({
           opacity: 1.0
-        }, this.wait_time);
+        }, 2000);
         return this.lockButton("You Win!!");
       } else if (this.your_victory === 2) {
-        $('#block').html("<img src=\"./image/2pwins/ryu_lose_ken_win.png\">");
+        $('#block').html("<img src=\"./image/2pwins/" + this.my_player + "_lose_" + this.your_player + "_win.png\">");
         $('#block').animate({
           opacity: 1.0
-        }, this.wait_time);
+        }, 2000);
         return this.lockButton("You Lose…");
       }
     }

@@ -16,9 +16,9 @@
 
 
 #your-choice {
+  transform: scale(-1,1);
   align-items: center;
   display: flex;
-  flex-direction: row-reverse;
   height: 145px;
   border: none;
   overflow: hidden;

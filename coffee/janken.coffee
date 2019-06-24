@@ -2,6 +2,8 @@ $ ->
   app.initialize()
 
 window.app =
+  chara: ""
+  chara_number: ""
   my_hand: 0
   your_hand: 0
   my_life: 100
@@ -15,6 +17,7 @@ window.app =
   final_result: ""
 
   initialize:->
+    @setChara()
     @beginTitle()
     @mySetBind()
     @checkLife()
@@ -24,16 +27,27 @@ window.app =
     @returnTitle()
     @endGame()
 
-  
- 
-
- 
-
 
   beginTitle:->
-    $('#start-button').click ->
+    console.log "beginTitle"
+    console.log @my_player
+    console.log @your_player
+    $('#start-button').click =>
+      console.log @my_player
+      console.log @your_player
       $('#start-title').css 'display', 'none'
       $('#game-screen').css 'display', 'block'
+      $('#my').html """<img src="./image/#{@my_player}_stand.gif">"""
+      $('#you').html """<img src="./image/#{@your_player}_stand.gif">"""
+      $('#gu').html """<img src="./image/select/#{@my_player}_hado_gazou.jpg">"""
+      $('#choki').html """<img src="./image/select/#{@my_player}_shoryu_gazou.jpg">"""
+      $('#pa').html """<img src="./image/select/#{@my_player}_tatsumaki_gazou.jpg">"""
+      $('#2pgu').html """<img src="./image/select/#{@your_player}_hado_gazou.jpg">"""
+      $('#2pchoki').html """<img src="./image/select/#{@your_player}_shoryu_gazou.jpg">"""
+      $('#2ppa').html """<img src="./image/select/#{@your_player}_tatsumaki_gazou.jpg">"""
+      $('#block').animate {
+        opacity: 0.0;
+        }
    
 
     $('service-button').click ->
@@ -41,18 +55,24 @@ window.app =
       $("#start-button").css 'display', 'none'
       $("#service-button").css 'display', 'none'
 
-
+  setChara:->
+    ALL_CHARACTERS = ["ryu","ken","goki"]
+    my_charanumber = 2 #TODO セレクト画面で帰る変数
+    @my_player = ALL_CHARACTERS[my_charanumber]
+    
+    your_charanumber = 0
+    @your_player = ALL_CHARACTERS[your_charanumber]
+    
 
   mySetBind:->
     $('#gu').bind 'click', =>
-      @putAllHands("ryu_gu", 0)
+      @putAllHands("#{@my_player}_gu", 0)
      
     $('#choki').bind 'click', =>
-      @putAllHands("ryu_choki", 1)
+      @putAllHands("#{@my_player}_choki", 1)
      
     $('#pa').bind 'click',=>
-      @putAllHands("ryu_pa", 2)
-
+      @putAllHands("#{@my_player}_pa", 2)
   
   
   putAllHands:(hand, @my_hand) ->
@@ -69,20 +89,24 @@ window.app =
   
   changeMyHand:(hand)->
     if @round_count % 4 != 0
-      $('#my').html """<img src="./image/ryuskills/#{hand}.gif">"""
+      $('#my').html """<img src="./image/#{@my_player}skills/#{hand}.gif">"""
+      console.log "waza"
     
     if @round_count % 4 == 0
-      $('#my').html """<img src="./image/ryuskills/#{hand}_ex.gif">"""
+      $('#my').html """<img src="./image/#{@my_player}skills/#{hand}_ex.gif">"""
     console.log "exwaza"
+    
+  
+  
 
   choiceYouHand: ->
     @your_hand = _.random 0, 2 #0, 1, 2
      
-    your_hand_string = ["ken_gu", "ken_choki", "ken_pa"]
+    your_hand_string = ["#{@your_player}_gu", "#{@your_player}_choki", "#{@your_player}_pa"]
     if @round_count % 4 != 0
-      $('#you').html """<img src="./image/kenskills/#{your_hand_string[@your_hand]}.gif">"""
+      $('#you').html """<img src="./image/#{@your_player}skills/#{your_hand_string[@your_hand]}.gif">"""
     if @round_count % 4 == 0
-      $('#you').html """<img src="./image/kenskills/#{your_hand_string[@your_hand]}_ex.gif">"""
+      $('#you').html """<img src="./image/#{@your_player}skills/#{your_hand_string[@your_hand]}_ex.gif">"""
 
   showResult: () ->
     diff_hands = @your_hand - @my_hand
@@ -169,12 +193,11 @@ window.app =
 
   setPosition:->
     $('#my-choice').click =>
-      setTimeout (->
-        $('#my').html """<img src="./image/ryu_stand.gif">"""
-        $('#you').html """<img src="./image/ken_stand.gif">"""
+      setTimeout (=>
+        $('#my').html """<img src="./image/#{@my_player}_stand.gif">"""
+        $('#you').html """<img src="./image/#{@your_player}_stand.gif">"""
         $('#result').html "Get Ready...?"
        ), @wait_time
-      
       
 
 
@@ -183,28 +206,28 @@ window.app =
 
     if @your_life <= 0 
       @lockButton("You Win!!")
-      $('#my').html """<img src="./image/ryu_victory.gif">"""
-      $('#you').html """<img src="./image/ken_lose.gif">"""
+      $('#my').html """<img src="./image/#{@my_player}_victory.gif">"""
+      $('#you').html """<img src="./image/#{@your_player}_lose.gif">"""
 
     else if @my_life <= 0
       @lockButton("You Lose…") 
-      $('#my').html """<img src="./image/ryu_lose.gif">"""
-      $('#you').html """<img src="./image/ken_victory.gif">"""
+      $('#my').html """<img src="./image/#{@my_player}_lose.gif">"""
+      $('#you').html """<img src="./image/#{@your_player}_victory.gif">"""
 
     if @round_count == 12 
       if @my_life > @your_life
         @lockButton("You Win!!")
-        $('#my').html """<img src="./image/ryu_victory.gif">"""
-        $('#you').html """<img src="./image/ken_lose.gif">"""
+        $('#my').html """<img src="./image/#{@my_player}_victory.gif">"""
+        $('#you').html """<img src="./image/#{@your_player}_lose.gif">"""
 
       else if @your_life > @my_life
         @lockButton("You Lose…")
-        $('#my').html """<img src="./image/ryu_lose.gif">"""
-        $('#you').html """<img src="./image/ken_victory.gif">"""
+        $('#my').html """<img src="./image/#{@my_player}_lose.gif">"""
+        $('#you').html """<img src="./image/#{@your_player}_victory.gif">"""
       else if @your_life == @my_life
         @lockButton("Draw Game")
-        $('#my').html """<img src="./image/ryu_stand.gif">"""
-        $('#you').html """<img src="./image/ken_stand.gif">"""
+        $('#my').html """<img src="./image/#{@my_player}_stand.gif">"""
+        $('#you').html """<img src="./image/#{@your_player}_stand.gif">"""
     
 
     
@@ -229,8 +252,8 @@ window.app =
       @round_count = 0
       
       # my, youの画像
-      $('#my').html """<img src="./image/ryu_stand.gif">"""
-      $('#you').html """<img src="./image/ken_stand.gif">"""
+      $('#my').html """<img src="./image/#{@my_player}_stand.gif">"""
+      $('#you').html """<img src="./image/#{@your_player}_stand.gif">"""
       $('#block').animate {
          opacity: 0.0;
         }
@@ -271,8 +294,8 @@ window.app =
       
       $('#game-screen').css 'display', 'none'
       $('#start-title').css 'display', 'block'
-      $('#my').html """<img src="./image/ryu_stand.gif">"""
-      $('#you').html """<img src="./image/ken_stand.gif">"""
+      $('#my').html """<img src="./image/#{@my_player}_stand.gif">"""
+      $('#you').html """<img src="./image/#{@your_player}_stand.gif">"""
       $('#block').animate {
          opacity: 0.0;
         }
@@ -308,9 +331,9 @@ window.app =
   nextGame: () ->
     console.log "nextgame"
     if (@final_result == "You Win!!") or (@final_result == "You Lose…") or (@final_result == "Draw Game")
-      setTimeout (->
-        $('#my').html """<img src="./image/ryu_stand.gif">"""
-        $('#you').html """<img src="./image/ken_stand.gif">"""
+      setTimeout (=>
+        $('#my').html """<img src="./image/#{@my_player}_stand.gif">"""
+        $('#you').html """<img src="./image/#{@your_player}_stand.gif">"""
         $('#result').html "Get Ready...?"
         $('#final-result').html "最終結果"
         
@@ -336,17 +359,17 @@ window.app =
     console.log "endgame" 
     if @my_victory == 2 
       console.log "cuo"
-      $('#block').html """<img src="./image/1pwins/ryu_win_ken_lose.png">"""
+      $('#block').html """<img src="./image/1pwins/#{@my_player}_win_#{@your_player}_lose.png">"""
       $('#block').animate {
          opacity: 1.0;
-        }, @wait_time
+        }, 2000
       @lockButton("You Win!!")
     
     else if @your_victory == 2
-      $('#block').html """<img src="./image/2pwins/ryu_lose_ken_win.png">"""
+      $('#block').html """<img src="./image/2pwins/#{@my_player}_lose_#{@your_player}_win.png">"""
       $('#block').animate {
          opacity: 1.0;
-        }, @wait_time
+        }, 2000
       @lockButton("You Lose…")
       
 
