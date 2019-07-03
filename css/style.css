@@ -1,3 +1,63 @@
+#characterselect-screen{
+  background-image: url("../image/åç.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center center;
+}
+
+
+#character {
+  display: inline-flex;
+  zoom: 0.5;
+  transform: scale(-1,1);
+}
+
+#cpu-character {
+  margin: 0% 0% 0% 58.8%;
+  flex-direction: row-reverse;
+  text-align: end;
+  background: #fff;
+  border-top:1px solid #ddd;
+  border-right:3px solid #3cf;
+  border-bottom:1px solid #ddd;
+  border-left:3px solid #3cf;
+  padding: 5px 0 5px 10px;
+  font-family: "ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro",Meiryo,"メイリオ",Helvetica,Sans-Serif;
+
+  background: -moz-linear-gradient(top, #fff 0%, #eee 50%, #ddd 51%, #fff 100%); /* firefox */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(50%,#eee), color-stop(51%,#ddd), color-stop(100%,#fff)); /* webkit */
+  -pie-background:linear-gradient(top, #fff 0%, #eee 50%, #ddd 51%, #fff 100%);
+}
+
+#select-result {
+}
+
+#my-select{
+  display: inline-flex;
+  transform: scale(-1,1);
+  height: 240px;
+  zoom:0.8;
+}
+
+#vs {
+  text-align: center;
+  zoom:0.9;
+}
+
+#your-select {
+  display: flex; 
+  flex-direction: row-reverse;
+  height: 240px;
+  zoom:0.8;
+}
+
+#cpu {
+  display: flex; 
+  flex-direction: row-reverse;
+  zoom: 0.5;
+  
+}
+
 #choice-hands { 
   display: flex
 }
@@ -156,6 +216,10 @@ h1 {
   display :none; 
 }
 
+#characterselect-screen {
+  display :none; 
+}
+
 #next-button {
 
   display: none;
@@ -195,4 +259,40 @@ h1 {
   
   
 }
+
+#caution{ 
+  display:none; 
+  position: absolute;
+  left: 40.5%;
+  bottom: 57%;
+  background: #fff;
+  border-top:1px solid #ddd;
+  border-right:3px solid #3cf;
+  border-bottom:1px solid #ddd;
+  border-left:3px solid #3cf;
+  padding: 5px 0 5px 10px;
+  font-family: "ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro",Meiryo,"メイリオ",Helvetica,Sans-Serif;
+
+  background: -moz-linear-gradient(top, #fff 0%, #eee 50%, #ddd 51%, #fff 100%); /* firefox */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(50%,#eee), color-stop(51%,#ddd), color-stop(100%,#fff)); /* webkit */
+  -pie-background:linear-gradient(top, #fff 0%, #eee 50%, #ddd 51%, #fff 100%);
+  
+}
+
+h3{
+  width: 40%;
+  background: #fff;
+  border-top:1px solid #ddd;
+  border-right:3px solid #3cf;
+  border-bottom:1px solid #ddd;
+  border-left:3px solid #3cf;
+  padding: 5px 0 5px 10px;
+  font-family: "ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro",Meiryo,"メイリオ",Helvetica,Sans-Serif;
+
+  background: -moz-linear-gradient(top, #fff 0%, #eee 50%, #ddd 51%, #fff 100%); /* firefox */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fff), color-stop(50%,#eee), color-stop(51%,#ddd), color-stop(100%,#fff)); /* webkit */
+  -pie-background:linear-gradient(top, #fff 0%, #eee 50%, #ddd 51%, #fff 100%);
+}
+
+
 
