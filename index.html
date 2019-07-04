@@ -9,50 +9,50 @@
 
   <body>
     
-   <div>
+   <div id="title-screen" class="screen">
      <div id ="start-title">
        <h1><img src="./image/street_fighter_2_ja.png" width="900px"></h1>
        <div>
          <a><button id="start-button">俺より強いヤツに会いに行く</button></a>
        </div>
 
-        <br>
-        <br>
+       <br>
+       <br>
 
-         <div>
-          <button id="service-button">接待ゲームモード</button>
-         </div>
+       <div>
+         <button id="service-button">接待ゲームモード</button>
+       </div>
      </div>
-    </div>
+   </div>
 
-        <div id ="characterselect-screen">
-          <br>
-            <div id = "character">
-              <div id="goki"><img src="./image/goki_select.gif"></div>
-              <div id="ken"><img src="./image/ken_select.gif"></div>
-              <div id="ryu"><img src="./image/ryu_select.gif"></div>
-            </div>
-        
-          <h3>PLAYER SELECT</h3>
-             <div id = "select-result">
-              <div id ="my-select"></div>
-              <br>
-              <div id ="vs"><img src="./image/vs.jpg"></div>
-              <div id ="caution">SELECT CHARACTER ！！</div>
-              <div id ="your-select"></div>
-             </div>
+   <div id="characterselect-screen" class="screen">
+     <br>
+     <div id = "character-box">
+       <div id="goki" class="chara" data-player="my" data-chara="goki"><img src="./image/goki_select.gif"></div>
+       <div id="ken" class="chara" data-player="my" data-chara="ken"><img src="./image/ken_select.gif"></div>
+       <div id="ryu" class="chara" data-player="my" data-chara="ryu"><img src="./image/ryu_select.gif"></div>
+     </div>
+     
+     <h3>PLAYER SELECT</h3>
+     <div id = "select-result">
+       <div id ="my-select"></div>
+       <br>
+       <div id ="vs"><img src="./image/vs.jpg"></div>
+       <div id ="caution">SELECT CHARACTER ！！</div>
+       <div id ="your-select"></div>
+     </div>
 
-           <div id ="cpu-character">CPU SELECT</div>
-           <br>
-                  <div id ="cpu">
-                    <div id="ryu2p"><img src="./image/ryu_select.gif"></div>
-                    <div id="ken2p"><img src="./image/ken_select.gif"></div>
-                    <div id="goki2p"><img src="./image/goki_select.gif"></div>
-                  </div>
-        </div>
+      <div id ="cpu-character-box">CPU SELECT</div>
+      <br>
+      <div id ="cpu">
+        <div id="ryu2p" class="chara" data-player="your" data-chara="ryu"><img src="./image/ryu_select.gif"></div>
+        <div id="ken2p" class="chara" data-player="your" data-chara="ken"><img src="./image/ken_select.gif"></div>
+        <div id="goki2p" class="chara" data-player="your" data-chara="goki"><img src="./image/goki_select.gif"></div>
+      </div>
+   </div>
 
 
-    <div id ="game-screen">
+    <div id ="game-screen" class="screen">
       <h2>じゃん拳</h2>
       <div id="count-round"><img src="./image/rounds/round_1.png"></div>
 <br>

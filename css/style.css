@@ -6,13 +6,13 @@
 }
 
 
-#character {
+#character-box {
   display: inline-flex;
   zoom: 0.5;
   transform: scale(-1,1);
 }
 
-#cpu-character {
+#cpu-character-box {
   margin: 0% 0% 0% 58.8%;
   flex-direction: row-reverse;
   text-align: end;
