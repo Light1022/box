@@ -5,17 +5,18 @@ window.app =
   chara: ""
   chara_number: ""
   my_hand: 0
-  my_player: ""
-  your_player: ""
+  my_player:"" 
+  your_player:"" 
   your_hand: 0
   wait_time: 5000
   your_hand_string: ""
   all_result: ""
   final_result: ""
-  is_test: false
+  is_test: false 
   HAND_STR: ["gu", "choki", "pa"]
 
   initialize:->
+    console.log('initil')
     @setTest()
     @setTransrate()
     @beginTitle()
@@ -42,7 +43,7 @@ window.app =
       $('#2ppa').html """<img src="./image/select/#{@your_player}_tatsumaki_gazou.jpg">""" 
       @changeScreen("#game-screen")
       @resetGame()
-
+ 
   setTransrate:() ->
     @JANKEN_WIN_STR =  "HIT!!"
     @JANKEN_DRAW_STR =  "アイコ"
@@ -64,33 +65,48 @@ window.app =
   selectChara:->
     self = @
     $('.chara').bind 'click', ->
+      characters = {
+        ryu:{name: "ryu", life: 100, gu: 22, choki: 18, pa: 15},
+        ken:{name: "ken", life: 100, gu: 5, choki: 30, pa: 20},
+        goki:{name: "goki", life: 80, gu: 25, choki: 25, pa: 25}
+        }
+
       player =  $(@).attr 'data-player'
       chara = $(@).attr 'data-chara'
       $("##{player}-select").html """<img src="./image/#{chara}_select.gif">"""
 
       if player == 'my'
-        self.my_player = chara
+        self.my_player = characters[chara]
       else
-        self.your_player = chara
+        self.your_player = characters[chara]
 
       self.resetCaution()
    
   startGame:->
     $('#vs').bind 'click', => 
+      console.log("vs click")
+      console.log @my_player
       if(@my_player != "") and (@your_player != "")
         @changeScreen("#game-screen")
         @resetGame()
 
-        $('#my').html """<img src="./image/#{@my_player}_stand.gif">"""
-        $('#you').html """<img src="./image/#{@your_player}_stand.gif">"""
-        $('#gu').html """<img src="./image/select/#{@my_player}_hado_gazou.jpg">"""
-        $('#choki').html """<img src="./image/select/#{@my_player}_shoryu_gazou.jpg">"""
-        $('#pa').html """<img src="./image/select/#{@my_player}_tatsumaki_gazou.jpg">"""
-        $('#2pgu').html """<img src="./image/select/#{@your_player}_hado_gazou.jpg">"""
-        $('#2pchoki').html """<img src="./image/select/#{@your_player}_shoryu_gazou.jpg">""" 
-        $('#2ppa').html """<img src="./image/select/#{@your_player}_tatsumaki_gazou.jpg">""" 
+        $('#my').html """<img src="./image/#{@my_player.name}_stand.gif">"""
+        $('#you').html """<img src="./image/#{@your_player.name}_stand.gif">"""
+        $('#gu').html """<img src="./image/select/#{@my_player.name}_hado_gazou.jpg">"""
+        $('#choki').html """<img src="./image/select/#{@my_player.name}_shoryu_gazou.jpg">"""
+        $('#pa').html """<img src="./image/select/#{@my_player.name}_tatsumaki_gazou.jpg">"""
+        $('#2pgu').html """<img src="./image/select/#{@your_player.name}_hado_gazou.jpg">"""
+        $('#2pchoki').html """<img src="./image/select/#{@your_player.name}_shoryu_gazou.jpg">""" 
+        $('#2ppa').html """<img src="./image/select/#{@your_player.name}_tatsumaki_gazou.jpg">""" 
       else
         $('#caution').slideDown 'slow'
+    
+      @my_life = @my_player.life
+      @your_life = @your_player.life
+      $('#my-life').attr(max:@my_life) 
+      $('#your-life').attr(max:@your_life) 
+        
+  
 
   resetCaution:->
     if(@my_player != "") and (@your_player != "")
@@ -99,6 +115,7 @@ window.app =
   mySetBind:->
     $('#gu').bind 'click', =>
       @putAllHands(0)
+
      
     $('#choki').bind 'click', =>
       @putAllHands(1)
@@ -106,12 +123,13 @@ window.app =
     $('#pa').bind 'click',=>
       @putAllHands(2)
   
-  putAllHands:(@my_hand) ->
+  putAllHands:(hand) ->
+    @my_hand = hand
     @countupRound()
     @choiceYouHand()
-    @changeMyHand(@my_hand)
+    @changeMyHand(hand)
     @showRoundResult()
-    @checkLife()
+    @checkLife(hand)
     @setPosition()
     @announceFinal()
     @checkMark()
@@ -119,15 +137,16 @@ window.app =
     @endGame()
   
   changeMyHand:(hand)->
-    file_name = if (@round_count % 4 != 0) then "#{@my_player}_#{@HAND_STR[hand]}.gif" else "#{@my_player}_#{@HAND_STR[hand]}_ex.gif"
-    $('#my').html """<img src="./image/#{@my_player}skills/#{file_name}">"""
+    file_name = if (@round_count % 4 != 0) then "#{@my_player.name}_#{@HAND_STR[hand]}.gif" else "#{@my_player.name}_#{@HAND_STR[hand]}_ex.gif"
+    $('#my').html """<img src="./image/#{@my_player.name}skills/#{file_name}">"""
     $('#gu, #choki, #pa').unbind 'click'
         
   choiceYouHand: ->
     @your_hand = _.random 0, 2 #0, 1, 2
 
-    file_name = if (@round_count % 4 != 0) then "#{@your_player}_#{@HAND_STR[@your_hand]}.gif" else "#{@your_player}_#{@HAND_STR[@your_hand]}_ex.gif"
-    $('#you').html """<img src="./image/#{@your_player}skills/#{file_name}">"""
+    file_name = if (@round_count % 4 != 0) then "#{@your_player.name}_#{@HAND_STR[@your_hand]}.gif" else "#{@your_player.name}_#{@HAND_STR[@your_hand]}_ex.gif"
+    $('#you').html """<img src="./image/#{@your_player.name}skills/#{file_name}">"""
+    console.log @your_hand
 
   showRoundResult: () ->
     diff_hands = @your_hand - @my_hand
@@ -140,18 +159,22 @@ window.app =
       @all_result = @JANKEN_LOSE_STR
     $('#result').html "<h>#{@all_result}</h>"
   
-  checkLife: () ->
+  checkLife: (hand) ->
+ 
     if @all_result == @JANKEN_WIN_STR
       if @round_count % 4 != 0
-        @your_life = @your_life-20
+        @your_life = @your_life-@my_player[@HAND_STR[hand]]
+        console.log "damage"
+        console.log @my_player[hand]
       else
-        @your_life = @your_life-60
+        @your_life = @your_life-@my_player[@HAND_STR[hand]]*3
       $('#your-life').attr(value:@your_life) 
     else if @all_result == @JANKEN_LOSE_STR
       if @round_count % 4 !=0
-        @my_life = @my_life-20
+        @my_life = @my_life-@your_player[@HAND_STR[@your_hand]]
+        console.log @my_life
       else
-        @my_life = @my_life-60
+        @my_life = @my_life-@your_player[@HAND_STR[@your_hand]]*3
       $('#my-life').attr(value:@my_life) 
 
   checkMark: () ->
@@ -203,8 +226,8 @@ window.app =
 
   showMatchResult:(result_message, my_result, your_result) ->
     @lockButton(result_message)
-    $('#my').html """<img src="./image/#{@my_player}_#{my_result}.gif">"""
-    $('#you').html """<img src="./image/#{@your_player}_#{your_result}.gif">"""
+    $('#my').html """<img src="./image/#{@my_player.name}_#{my_result}.gif">"""
+    $('#you').html """<img src="./image/#{@your_player.name}_#{your_result}.gif">"""
 
   countupRound:->
     @round_count = @round_count+1 
@@ -213,11 +236,27 @@ window.app =
   lockButton: (@final_result) ->
     $('#gu, #choki, #pa').unbind 'click'
  
-   setGameButtonBind:() ->
+  setGameButtonBind:() ->
     $('#reset-button').bind 'click',=>
       @resetGame()
+      $('#block').animate {
+         opacity: 0.0;
+        }, 10
+      @mySetBind()
+
     $('#title-button').bind 'click',=>
       @changeScreen("#title-screen") 
+      $('#block').animate {
+         opacity: 0.0;
+        }, 1000
+      @startGame()
+      @my_player = ""
+      console.log "reset"
+      @your_player = ""
+      $("#my-select").html ""
+      $("#your-select").html ""
+      @mySetBind()
+      
 
   nextGame: () ->
     if (@final_result == "You Win!!") or (@final_result == "You Lose…") or (@final_result == "Draw Game")
@@ -228,30 +267,30 @@ window.app =
 
   endGame: () ->
     if @my_victory == 2 
-      $('#block').html """<img src="./image/1pwins/#{@my_player}_win_#{@your_player}_lose.png">"""
+      $('#block').html """<img src="./image/1pwins/#{@my_player.name}_win_#{@your_player.name}_lose.png">"""
       $('#block').animate {
          opacity: 1.0;
         }, 2000
       @lockButton("You Win!!")
     
     else if @your_victory == 2
-      $('#block').html """<img src="./image/2pwins/#{@my_player}_lose_#{@your_player}_win.png">"""
+      $('#block').html """<img src="./image/2pwins/#{@my_player.name}_lose_#{@your_player.name}_win.png">"""
       $('#block').animate {
          opacity: 1.0;
         }, 2000
       @lockButton("You Lose…")
 
   resetRound:() ->
-    $('#my').html """<img src="./image/#{@my_player}_stand.gif">"""
-    $('#you').html """<img src="./image/#{@your_player}_stand.gif">"""
+    $('#my').html """<img src="./image/#{@my_player.name}_stand.gif">"""
+    $('#you').html """<img src="./image/#{@your_player.name}_stand.gif">"""
     $('#result').html "Get Ready...?"
 
   resetMatch:() ->
     $('#count-round').html """<img src="./image/rounds/round_1.png">"""
     @round_count = 0 
       
-    @my_life = 100
-    @your_life = 100
+    @my_life = @my_player.life
+    @your_life = @your_player.life
     $('#my-life').attr(value:@my_life) 
     $('#your-life').attr(value:@your_life) 
     
@@ -264,7 +303,8 @@ window.app =
     @my_victory = 0
     @your_victory =0
     @showMark()
-
+    
+ 
     @resetMatch()
     if (@final_result == "You Win!!") or (@final_result == "You Lose…") or (@final_result == "Draw Game")
       @mySetBind()

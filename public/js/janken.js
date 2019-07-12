@@ -18,6 +18,7 @@
     is_test: false,
     HAND_STR: ["gu", "choki", "pa"],
     initialize: function() {
+      console.log('initil');
       this.setTest();
       this.setTransrate();
       this.beginTitle();
@@ -71,14 +72,37 @@
       var self;
       self = this;
       return $('.chara').bind('click', function() {
-        var chara, player;
+        var chara, characters, player;
+        characters = {
+          ryu: {
+            name: "ryu",
+            life: 100,
+            gu: 22,
+            choki: 18,
+            pa: 15
+          },
+          ken: {
+            name: "ken",
+            life: 100,
+            gu: 5,
+            choki: 30,
+            pa: 20
+          },
+          goki: {
+            name: "goki",
+            life: 80,
+            gu: 25,
+            choki: 25,
+            pa: 25
+          }
+        };
         player = $(this).attr('data-player');
         chara = $(this).attr('data-chara');
         $("#" + player + "-select").html("<img src=\"./image/" + chara + "_select.gif\">");
         if (player === 'my') {
-          self.my_player = chara;
+          self.my_player = characters[chara];
         } else {
-          self.your_player = chara;
+          self.your_player = characters[chara];
         }
         return self.resetCaution();
       });
@@ -86,20 +110,30 @@
     startGame: function() {
       return $('#vs').bind('click', (function(_this) {
         return function() {
+          console.log("vs click");
+          console.log(_this.my_player);
           if ((_this.my_player !== "") && (_this.your_player !== "")) {
             _this.changeScreen("#game-screen");
             _this.resetGame();
-            $('#my').html("<img src=\"./image/" + _this.my_player + "_stand.gif\">");
-            $('#you').html("<img src=\"./image/" + _this.your_player + "_stand.gif\">");
-            $('#gu').html("<img src=\"./image/select/" + _this.my_player + "_hado_gazou.jpg\">");
-            $('#choki').html("<img src=\"./image/select/" + _this.my_player + "_shoryu_gazou.jpg\">");
-            $('#pa').html("<img src=\"./image/select/" + _this.my_player + "_tatsumaki_gazou.jpg\">");
-            $('#2pgu').html("<img src=\"./image/select/" + _this.your_player + "_hado_gazou.jpg\">");
-            $('#2pchoki').html("<img src=\"./image/select/" + _this.your_player + "_shoryu_gazou.jpg\">");
-            return $('#2ppa').html("<img src=\"./image/select/" + _this.your_player + "_tatsumaki_gazou.jpg\">");
+            $('#my').html("<img src=\"./image/" + _this.my_player.name + "_stand.gif\">");
+            $('#you').html("<img src=\"./image/" + _this.your_player.name + "_stand.gif\">");
+            $('#gu').html("<img src=\"./image/select/" + _this.my_player.name + "_hado_gazou.jpg\">");
+            $('#choki').html("<img src=\"./image/select/" + _this.my_player.name + "_shoryu_gazou.jpg\">");
+            $('#pa').html("<img src=\"./image/select/" + _this.my_player.name + "_tatsumaki_gazou.jpg\">");
+            $('#2pgu').html("<img src=\"./image/select/" + _this.your_player.name + "_hado_gazou.jpg\">");
+            $('#2pchoki').html("<img src=\"./image/select/" + _this.your_player.name + "_shoryu_gazou.jpg\">");
+            $('#2ppa').html("<img src=\"./image/select/" + _this.your_player.name + "_tatsumaki_gazou.jpg\">");
           } else {
-            return $('#caution').slideDown('slow');
+            $('#caution').slideDown('slow');
           }
+          _this.my_life = _this.my_player.life;
+          _this.your_life = _this.your_player.life;
+          $('#my-life').attr({
+            max: _this.my_life
+          });
+          return $('#your-life').attr({
+            max: _this.your_life
+          });
         };
       })(this));
     },
@@ -125,13 +159,13 @@
         };
       })(this));
     },
-    putAllHands: function(my_hand) {
-      this.my_hand = my_hand;
+    putAllHands: function(hand) {
+      this.my_hand = hand;
       this.countupRound();
       this.choiceYouHand();
-      this.changeMyHand(this.my_hand);
+      this.changeMyHand(hand);
       this.showRoundResult();
-      this.checkLife();
+      this.checkLife(hand);
       this.setPosition();
       this.announceFinal();
       this.checkMark();
@@ -140,15 +174,16 @@
     },
     changeMyHand: function(hand) {
       var file_name;
-      file_name = (this.round_count % 4 !== 0) ? this.my_player + "_" + this.HAND_STR[hand] + ".gif" : this.my_player + "_" + this.HAND_STR[hand] + "_ex.gif";
-      $('#my').html("<img src=\"./image/" + this.my_player + "skills/" + file_name + "\">");
+      file_name = (this.round_count % 4 !== 0) ? this.my_player.name + "_" + this.HAND_STR[hand] + ".gif" : this.my_player.name + "_" + this.HAND_STR[hand] + "_ex.gif";
+      $('#my').html("<img src=\"./image/" + this.my_player.name + "skills/" + file_name + "\">");
       return $('#gu, #choki, #pa').unbind('click');
     },
     choiceYouHand: function() {
       var file_name;
       this.your_hand = _.random(0, 2);
-      file_name = (this.round_count % 4 !== 0) ? this.your_player + "_" + this.HAND_STR[this.your_hand] + ".gif" : this.your_player + "_" + this.HAND_STR[this.your_hand] + "_ex.gif";
-      return $('#you').html("<img src=\"./image/" + this.your_player + "skills/" + file_name + "\">");
+      file_name = (this.round_count % 4 !== 0) ? this.your_player.name + "_" + this.HAND_STR[this.your_hand] + ".gif" : this.your_player.name + "_" + this.HAND_STR[this.your_hand] + "_ex.gif";
+      $('#you').html("<img src=\"./image/" + this.your_player.name + "skills/" + file_name + "\">");
+      return console.log(this.your_hand);
     },
     showRoundResult: function() {
       var diff_hands;
@@ -162,21 +197,24 @@
       }
       return $('#result').html("<h>" + this.all_result + "</h>");
     },
-    checkLife: function() {
+    checkLife: function(hand) {
       if (this.all_result === this.JANKEN_WIN_STR) {
         if (this.round_count % 4 !== 0) {
-          this.your_life = this.your_life - 20;
+          this.your_life = this.your_life - this.my_player[this.HAND_STR[hand]];
+          console.log("damage");
+          console.log(this.my_player[hand]);
         } else {
-          this.your_life = this.your_life - 60;
+          this.your_life = this.your_life - this.my_player[this.HAND_STR[hand]] * 3;
         }
         return $('#your-life').attr({
           value: this.your_life
         });
       } else if (this.all_result === this.JANKEN_LOSE_STR) {
         if (this.round_count % 4 !== 0) {
-          this.my_life = this.my_life - 20;
+          this.my_life = this.my_life - this.your_player[this.HAND_STR[this.your_hand]];
+          console.log(this.my_life);
         } else {
-          this.my_life = this.my_life - 60;
+          this.my_life = this.my_life - this.your_player[this.HAND_STR[this.your_hand]] * 3;
         }
         return $('#my-life').attr({
           value: this.my_life
@@ -233,8 +271,8 @@
     },
     showMatchResult: function(result_message, my_result, your_result) {
       this.lockButton(result_message);
-      $('#my').html("<img src=\"./image/" + this.my_player + "_" + my_result + ".gif\">");
-      return $('#you').html("<img src=\"./image/" + this.your_player + "_" + your_result + ".gif\">");
+      $('#my').html("<img src=\"./image/" + this.my_player.name + "_" + my_result + ".gif\">");
+      return $('#you').html("<img src=\"./image/" + this.your_player.name + "_" + your_result + ".gif\">");
     },
     countupRound: function() {
       this.round_count = this.round_count + 1;
@@ -247,12 +285,26 @@
     setGameButtonBind: function() {
       $('#reset-button').bind('click', (function(_this) {
         return function() {
-          return _this.resetGame();
+          _this.resetGame();
+          $('#block').animate({
+            opacity: 0.0
+          }, 10);
+          return _this.mySetBind();
         };
       })(this));
       return $('#title-button').bind('click', (function(_this) {
         return function() {
-          return _this.changeScreen("#title-screen");
+          _this.changeScreen("#title-screen");
+          $('#block').animate({
+            opacity: 0.0
+          }, 1000);
+          _this.startGame();
+          _this.my_player = "";
+          console.log("reset");
+          _this.your_player = "";
+          $("#my-select").html("");
+          $("#your-select").html("");
+          return _this.mySetBind();
         };
       })(this));
     },
@@ -268,13 +320,13 @@
     },
     endGame: function() {
       if (this.my_victory === 2) {
-        $('#block').html("<img src=\"./image/1pwins/" + this.my_player + "_win_" + this.your_player + "_lose.png\">");
+        $('#block').html("<img src=\"./image/1pwins/" + this.my_player.name + "_win_" + this.your_player.name + "_lose.png\">");
         $('#block').animate({
           opacity: 1.0
         }, 2000);
         return this.lockButton("You Win!!");
       } else if (this.your_victory === 2) {
-        $('#block').html("<img src=\"./image/2pwins/" + this.my_player + "_lose_" + this.your_player + "_win.png\">");
+        $('#block').html("<img src=\"./image/2pwins/" + this.my_player.name + "_lose_" + this.your_player.name + "_win.png\">");
         $('#block').animate({
           opacity: 1.0
         }, 2000);
@@ -282,15 +334,15 @@
       }
     },
     resetRound: function() {
-      $('#my').html("<img src=\"./image/" + this.my_player + "_stand.gif\">");
-      $('#you').html("<img src=\"./image/" + this.your_player + "_stand.gif\">");
+      $('#my').html("<img src=\"./image/" + this.my_player.name + "_stand.gif\">");
+      $('#you').html("<img src=\"./image/" + this.your_player.name + "_stand.gif\">");
       return $('#result').html("Get Ready...?");
     },
     resetMatch: function() {
       $('#count-round').html("<img src=\"./image/rounds/round_1.png\">");
       this.round_count = 0;
-      this.my_life = 100;
-      this.your_life = 100;
+      this.my_life = this.my_player.life;
+      this.your_life = this.your_player.life;
       $('#my-life').attr({
         value: this.my_life
       });
