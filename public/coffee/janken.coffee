@@ -128,6 +128,7 @@ window.app =
       @putAllHands(2)
   
   putAllHands:(hand) ->
+    console.log "putAllHands"
     @my_hand = hand
     @countupRound()
     @choiceYouHand()
@@ -261,7 +262,6 @@ window.app =
       $('#block').animate {
          opacity: 0.0;
         }, 10
-      @mySetBind()
 
     $('#title-button').bind 'click',=>
       @changeScreen("#title-screen") 
@@ -269,13 +269,12 @@ window.app =
          opacity: 0.0;
         }, 1000
       @startGame()
+      @round_count = 0
       @my_player = ""
       console.log "reset"
       @your_player = ""
       $("#my-select").html ""
       $("#your-select").html ""
-      @mySetBind()
-      
 
   nextGame: () ->
     if (@final_result == "You Win!!") or (@final_result == "You Lose…") or (@final_result == "Draw Game")
@@ -300,9 +299,10 @@ window.app =
       @lockButton("You Lose…")
 
   resetRound:() ->
-    $('#my').html """<img src="./image/#{@my_player.name}_stand.gif">"""
-    $('#you').html """<img src="./image/#{@your_player.name}_stand.gif">"""
-    $('#result').html "Get Ready...?"
+    if @my_player != "" 
+      $('#my').html """<img src="./image/#{@my_player.name}_stand.gif">"""
+      $('#you').html """<img src="./image/#{@your_player.name}_stand.gif">"""
+      $('#result').html "Get Ready...?"
 
   resetMatch:() ->
     $('#count-round').html """<img src="./image/rounds/round_1.png">"""
@@ -319,8 +319,9 @@ window.app =
     @resetRound()
     
   resetGame: () ->
+    @round_count = 0
     @my_victory = 0
-    @your_victory =0
+    @your_victory = 0
     @showMark()
     
  

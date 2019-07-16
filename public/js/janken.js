@@ -166,6 +166,7 @@
       })(this));
     },
     putAllHands: function(hand) {
+      console.log("putAllHands");
       this.my_hand = hand;
       this.countupRound();
       this.choiceYouHand();
@@ -313,10 +314,9 @@
       $('#reset-button').bind('click', (function(_this) {
         return function() {
           _this.resetGame();
-          $('#block').animate({
+          return $('#block').animate({
             opacity: 0.0
           }, 10);
-          return _this.mySetBind();
         };
       })(this));
       return $('#title-button').bind('click', (function(_this) {
@@ -326,12 +326,12 @@
             opacity: 0.0
           }, 1000);
           _this.startGame();
+          _this.round_count = 0;
           _this.my_player = "";
           console.log("reset");
           _this.your_player = "";
           $("#my-select").html("");
-          $("#your-select").html("");
-          return _this.mySetBind();
+          return $("#your-select").html("");
         };
       })(this));
     },
@@ -361,9 +361,11 @@
       }
     },
     resetRound: function() {
-      $('#my').html("<img src=\"./image/" + this.my_player.name + "_stand.gif\">");
-      $('#you').html("<img src=\"./image/" + this.your_player.name + "_stand.gif\">");
-      return $('#result').html("Get Ready...?");
+      if (this.my_player !== "") {
+        $('#my').html("<img src=\"./image/" + this.my_player.name + "_stand.gif\">");
+        $('#you').html("<img src=\"./image/" + this.your_player.name + "_stand.gif\">");
+        return $('#result').html("Get Ready...?");
+      }
     },
     resetMatch: function() {
       $('#count-round').html("<img src=\"./image/rounds/round_1.png\">");
@@ -381,6 +383,7 @@
       return this.resetRound();
     },
     resetGame: function() {
+      this.round_count = 0;
       this.my_victory = 0;
       this.your_victory = 0;
       this.showMark();
