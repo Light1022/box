@@ -13,6 +13,7 @@ window.app =
   all_result: ""
   final_result: ""
   is_test: false 
+  test2: false
   HAND_STR: ["gu", "choki", "pa"]
 
   initialize:->
@@ -27,6 +28,9 @@ window.app =
     @checkMark()
     @endGame()
     @setGameButtonBind()
+
+  setTest2:(bool) ->
+    @test2 = bool
 
   setTest:() ->
     if @is_test
@@ -56,12 +60,12 @@ window.app =
   beginTitle:->
     $('#start-button').click =>
       @changeScreen("#characterselect-screen")
-   
-    $('service-button').click ->
-      $('h1').css 'display', 'none'
-      $("#start-button").css 'display', 'none'
-      $("#service-button").css 'display', 'none'
-    
+      @is_normal = true
+
+    $('#service-button').click =>
+      @changeScreen("#characterselect-screen")
+      @is_normal = false
+  
   selectChara:->
     self = @
     $('.chara').bind 'click', ->
@@ -160,23 +164,38 @@ window.app =
     $('#result').html "<h>#{@all_result}</h>"
   
   checkLife: (hand) ->
- 
-    if @all_result == @JANKEN_WIN_STR
-      if @round_count % 4 != 0
-        @your_life = @your_life-@my_player[@HAND_STR[hand]]
-        console.log "damage"
-        console.log @my_player[hand]
-      else
-        @your_life = @your_life-@my_player[@HAND_STR[hand]]*3
-      $('#your-life').attr(value:@your_life) 
-    else if @all_result == @JANKEN_LOSE_STR
-      if @round_count % 4 !=0
-        @my_life = @my_life-@your_player[@HAND_STR[@your_hand]]
-        console.log @my_life
-      else
-        @my_life = @my_life-@your_player[@HAND_STR[@your_hand]]*3
-      $('#my-life').attr(value:@my_life) 
+    if @is_normal
+      if @all_result == @JANKEN_WIN_STR
+        if @round_count % 4 != 0
+          @your_life = @your_life-@my_player[@HAND_STR[hand]]
+        else
+          @your_life = @your_life-@my_player[@HAND_STR[hand]]*3
+        $('#your-life').attr(value:@your_life) 
+    
+      else if @all_result == @JANKEN_LOSE_STR
+        if @round_count % 4 !=0
+          @my_life = @my_life-@your_player[@HAND_STR[@your_hand]]
+        else
+          @my_life = @my_life-@your_player[@HAND_STR[@your_hand]]*3
+        $('#my-life').attr(value:@my_life) 
 
+    else
+      if @all_result == @JANKEN_WIN_STR
+        if @round_count % 4 !=0
+          @my_life = @my_life-@your_player[@HAND_STR[@your_hand]]
+          console.log @my_life
+        else
+          @my_life = @my_life-@your_player[@HAND_STR[@your_hand]]*3
+        $('#my-life').attr(value:@my_life) 
+
+      else if @all_result == @JANKEN_LOSE_STR
+        if @round_count % 4 != 0
+          @your_life = @your_life-@my_player[@HAND_STR[hand]]
+          console.log "damage"
+        else
+          @your_life = @your_life-@my_player[@HAND_STR[hand]]*3
+        $('#your-life').attr(value:@your_life) 
+ 
   checkMark: () ->
     if @final_result == "You Win!!"
       @my_victory = @my_victory+1

@@ -16,6 +16,7 @@
     all_result: "",
     final_result: "",
     is_test: false,
+    test2: false,
     HAND_STR: ["gu", "choki", "pa"],
     initialize: function() {
       console.log('initil');
@@ -29,6 +30,9 @@
       this.checkMark();
       this.endGame();
       return this.setGameButtonBind();
+    },
+    setTest2: function(bool) {
+      return this.test2 = bool;
     },
     setTest: function() {
       if (this.is_test) {
@@ -59,14 +63,16 @@
     beginTitle: function() {
       $('#start-button').click((function(_this) {
         return function() {
-          return _this.changeScreen("#characterselect-screen");
+          _this.changeScreen("#characterselect-screen");
+          return _this.is_normal = true;
         };
       })(this));
-      return $('service-button').click(function() {
-        $('h1').css('display', 'none');
-        $("#start-button").css('display', 'none');
-        return $("#service-button").css('display', 'none');
-      });
+      return $('#service-button').click((function(_this) {
+        return function() {
+          _this.changeScreen("#characterselect-screen");
+          return _this.is_normal = false;
+        };
+      })(this));
     },
     selectChara: function() {
       var self;
@@ -198,27 +204,48 @@
       return $('#result').html("<h>" + this.all_result + "</h>");
     },
     checkLife: function(hand) {
-      if (this.all_result === this.JANKEN_WIN_STR) {
-        if (this.round_count % 4 !== 0) {
-          this.your_life = this.your_life - this.my_player[this.HAND_STR[hand]];
-          console.log("damage");
-          console.log(this.my_player[hand]);
-        } else {
-          this.your_life = this.your_life - this.my_player[this.HAND_STR[hand]] * 3;
+      if (this.is_normal) {
+        if (this.all_result === this.JANKEN_WIN_STR) {
+          if (this.round_count % 4 !== 0) {
+            this.your_life = this.your_life - this.my_player[this.HAND_STR[hand]];
+          } else {
+            this.your_life = this.your_life - this.my_player[this.HAND_STR[hand]] * 3;
+          }
+          return $('#your-life').attr({
+            value: this.your_life
+          });
+        } else if (this.all_result === this.JANKEN_LOSE_STR) {
+          if (this.round_count % 4 !== 0) {
+            this.my_life = this.my_life - this.your_player[this.HAND_STR[this.your_hand]];
+          } else {
+            this.my_life = this.my_life - this.your_player[this.HAND_STR[this.your_hand]] * 3;
+          }
+          return $('#my-life').attr({
+            value: this.my_life
+          });
         }
-        return $('#your-life').attr({
-          value: this.your_life
-        });
-      } else if (this.all_result === this.JANKEN_LOSE_STR) {
-        if (this.round_count % 4 !== 0) {
-          this.my_life = this.my_life - this.your_player[this.HAND_STR[this.your_hand]];
-          console.log(this.my_life);
-        } else {
-          this.my_life = this.my_life - this.your_player[this.HAND_STR[this.your_hand]] * 3;
+      } else {
+        if (this.all_result === this.JANKEN_WIN_STR) {
+          if (this.round_count % 4 !== 0) {
+            this.my_life = this.my_life - this.your_player[this.HAND_STR[this.your_hand]];
+            console.log(this.my_life);
+          } else {
+            this.my_life = this.my_life - this.your_player[this.HAND_STR[this.your_hand]] * 3;
+          }
+          return $('#my-life').attr({
+            value: this.my_life
+          });
+        } else if (this.all_result === this.JANKEN_LOSE_STR) {
+          if (this.round_count % 4 !== 0) {
+            this.your_life = this.your_life - this.my_player[this.HAND_STR[hand]];
+            console.log("damage");
+          } else {
+            this.your_life = this.your_life - this.my_player[this.HAND_STR[hand]] * 3;
+          }
+          return $('#your-life').attr({
+            value: this.your_life
+          });
         }
-        return $('#my-life').attr({
-          value: this.my_life
-        });
       }
     },
     checkMark: function() {
